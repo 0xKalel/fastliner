@@ -1,0 +1,15 @@
+ErrorDocument 404 /404.php
+
+<IfModule mod_rewrite.c>
+Options -Multiviews
+Options +FollowSymLinks
+RewriteBase /
+RewriteEngine On
+
+RewriteRule ^etats/([0-9a-zA-Z_]{1,100})$ fastliner/etats.php?projet=$1 [NC,L]
+RewriteRule ^facturation/([0-9]{1,100})/([0-9]{1,100})$ fastliner/facturation.php?idprojet=$1&idfacture=$2 [NC,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ fastliner/$1.php [NC,L]
+RewriteRule ^route/([0-9]+)$ fastliner/feuille_de_route.php?id=$1 [NC,L]
+</IfModule>
