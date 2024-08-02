@@ -1,0 +1,178 @@
+#affichage1 { display:none !important;}
+html,body { 
+	height:100%;
+	background-color:#DCDCDC;
+	margin:0px;
+	padding:0px;
+}
+#entet{display:block !important;}
+
+h1,h2,h3,h4,h5
+{
+	display:inline-block;
+}
+a,a img,a:hover,a img:hover,a:active,a img:active,a:link,a img:link
+{
+	text-decoration:none;
+	outline:0;
+}
+#bas,#feuille{
+       width: 600px;
+
+
+}
+#bas td{
+	padding-bottom:100px;
+		
+}
+table H4#cadre{
+	margin: 0px;
+	
+}
+table
+{	
+	border:1px solid black !important;
+	border-spacing:0;
+	background: url("../elements/cmxform-fieldset.gif") left bottom repeat-x;
+}
+th,td
+{
+	border:1px solid black !important;
+	padding:5px;
+	
+}
+th{
+	cursor:pointer;
+}
+.Routes th
+{
+	padding-right:25px;
+}
+#moteur
+{
+	min-height:5px;
+	background:#88ACC4;
+	width:100%;
+	padding:5px;
+	text-align:center;
+}
+#fast{
+	margin-left: 50px;
+
+}
+#fast h1{
+	position: absolute !important;
+
+
+}
+#fast h5{
+	margin-top: 40px !important;
+	display: -moz-box;
+	margin-left: 15px;
+}
+#titre{
+	text-align: center !important;
+    display: -moz-box!important;
+	margin-top: 100px;
+	/*display:-webkit-box !important;*/
+
+}
+.conteneur
+{
+	width:1000px;
+	margin:0px auto;
+}
+.Routes.conteneur
+{
+	margin:20px auto !important;
+}
+.ib
+{
+	display:inline-block;
+}
+.decroissant
+{
+	padding-right:25px;
+	background:url("../elements/decroissant.png") right 18px no-repeat ;
+}
+.croissant
+{
+	padding-right:25px;
+	background:url("../elements/croissant.png") right 18px no-repeat ;
+}
+.b
+{
+	padding-right:25px;
+	
+}
+.filtres
+{
+	float :left;
+	margin-left:50px;
+}
+.a{
+	
+	width : 20px;
+	background : black;
+}
+#form_filtre
+{
+	display:inline-block;
+}
+/**********************************
+
+Name: cmxform Styles
+
+***********************************/
+form.cmxform {
+	width: 370px;
+	font-size: 1.0em;
+	color: #333;
+}
+
+form.cmxform legend {
+	padding-left: 0;
+}
+
+form.cmxform legend, form.cmxform label {
+	color: #333;
+}
+
+form.cmxform fieldset {
+	border: none;
+	border-top: 1px solid #C9DCA6;
+	background: url("../elements/cmxform-fieldset.gif") left bottom repeat-x;
+	background-color: #F8FDEF;
+}
+
+form.cmxform fieldset fieldset {
+	background: none;
+}
+select{
+	width: 150px;
+}
+form.cmxform fieldset p, form.cmxform fieldset fieldset {
+	padding: 5px 10px 7px;
+	background: url("../elements/cmxform-divider.gif") left bottom repeat-x;
+}
+
+form.cmxform label.error, label.error {
+	/* remove the next line when you have trouble in IE6 with labels in list */
+	color: red;
+	font-style: italic;
+	font-size: 16px;
+}
+div.error { display: none; }
+input {	border: 1px solid black; }
+input.checkbox { border: none }
+input:focus { border: 1px dotted black; }
+input.error { border: 1px dotted red; }
+form.cmxform .gray * { color: gray; }
+
+form.cmxform fieldset {
+	margin-bottom: 10px;
+}
+body, div { font-family: 'lucida grande', helvetica, verdana, arial, sans-serif }
+#form { width: 500px; }
+#form label { width: 250px; }
+#form label.error, #form input.submit { margin-left: 253px; }

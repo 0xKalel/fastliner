@@ -1,0 +1,776 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<head>	
+	<title>Liste de routes</title>
+	<meta charset="ANSI">
+	<meta http-equiv="Content-Type" content="ANSI" />
+	<meta name="author" content="mondersky" />
+	<link rel="stylesheet" href="css/design.css?Thursday 5th /2014f June 2014 09:39:18 AM" type="text/css" />
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<link rel="stylesheet" href="js/date_piker/css/ui-darkness/jquery-ui-1.10.4.custom.css" />
+	<script type="text/javascript" src="js/date_piker/js/jquery-ui-1.10.4.custom.js"></script>
+	<script type="text/javascript" src="js/date_fr.js"></script>
+	<script type="text/javascript" src="js/autocomplete/js/jquery-ui-1.10.4.custom.js"></script>
+	<script type="text/javascript" src="js/notification/notification.js"></script>
+	<script type="text/javascript" src="js/scripts.js"></script>
+	<script type="text/javascript" src="js/jquery.form.js"></script>
+	<script>
+		var Cle_actuelle='routes';
+		var Champs={'nfr':'N&deg;fr','date':'Date','nom':'Nom chauffeur','matricule':'Matricule','destination':'Destination','idavance':'Avance','projet':'Projet','observation':'observation','prix':'Prix','depart':'Depart','idproduit':'Produit','poids':'Poids','n_document':'N&deg;doccument',}
+var K=0,Champs_omis=["id"],Champs_a_afficher,Filtres_choisis,Filtres_caches=Array(),Champ="",champs="",Page=1,Lettre="",Filtre=[];
+Limite=10;
+Sort="id",Ordre="DESC",
+Interval_date={min:"0",max:"0"};var ordre_prec;i=0;;
+		var Champs_complets=['nfr','date','nom','matricule','destination','idavance','projet','observation','prix','depart','idproduit','poids','n_document',]
+		var Champs_omis=["id","idavance","depart","idproduit","poids","n_document"],Champs_omis_selection=["date","poids","observation","ndocument","idproduit"];
+		function ouvrir_avances(element){
+			$("#cadre_avances").fadeIn(400);
+			$("#cadre_avances form input[name='id']").val($(element).parent().parent().attr("id"));
+			$("#cadre_avances .valeur_nfr").html($(element).parent().parent().attr("id"));
+		}
+		function ouvrir_modification(element){
+			$("#cadre_modification").fadeIn(400);
+			$("#cadre_modification form input[name='id']").val($(element).parent().parent().attr("id"));
+			$("#cadre_modification .valeur_nfr").html($(element).parent().parent().attr("id"));
+		}
+		function charger_elements(sort,ordre,filtre,interval_date,page,fonction_supplementaire){
+			var param={cle_actuelle:Cle_actuelle,sort:sort,ordre:ordre,filtre:filtre,interval_date:Interval_date,page:page};
+			$.post("ajax/chargement/charger_routes.php",param,function(resultat){
+				var resultat = jQuery.parseJSON(resultat);
+					var elements="";
+					Filtres_choisis="";
+					Filtres_choisis=extraire_filtres_choisis(Filtre);
+					Champs_a_afficher=arr_diff(Object.keys(Champs),Filtres_choisis)
+					Champs_a_afficher=arr_diff(Champs_a_afficher,Champs_omis)
+					elements="<thead>";
+					for(j=0;j<Champs_a_afficher.length;j++){
+						elements+="<th class='"+Champs_a_afficher[j]+"'>"+Champs[Champs_a_afficher[j]]+'</th>';
+					}
+					elements+="<th class='actions'>actions</th>"
+					elements+="</thead>";
+					if(resultat.length>0){
+						for(var i=0; i<resultat.length; i++) {
+							elements+="<tr id='"+resultat[i].id+"'>";
+							for(j=0;j<Champs_a_afficher.length;j++){
+								elements+="<td class='"+Champs_a_afficher[j]+"'>"+eval("resultat[i]."+Champs_a_afficher[j])+'</td>';
+							}
+							elements+="<td class='actions'><a href='javascript:' class='plus' ></a><a href='javascript:' class='liste'></a>";
+							elements+="<a href='javascript:' class='modifier'></a></td></tr>";
+						}
+					}
+					else
+						elements="<tr><td>Il n'y a aucun résultat pour cette recherche</td></tr>";
+				$elements=$(elements)
+				$($elements).find(".plus").click(function(){
+    				id=$(this).parent().parent().attr("id");
+					recharger_avances(id)
+					ouvrir_avances(this)
+				})
+				$($elements).find(".modifier").click(function(){
+    				id=$(this).parent().parent().attr("id");
+    				charger_ancienne_route(id);
+					ouvrir_modification(this);
+				})
+				$($elements).find(".liste").click(function(){
+					voir_feuille(this)
+				})
+				$("#tableau_elements").html($elements);
+				$('.conteneur.elements').show();
+				if(fonction_supplementaire)
+					fonction_supplementaire()
+			})
+		}
+		</script>
+
+</head> 
+<body>
+	<div id="conteneur">
+	 	<div id="notif">
+		<div id="notifh">	
+			<a style="padding-left: 10px; padding-right: 11px;"  id="notification" rel="#fond"></a>
+		</div>
+	</div>
+	<div id="entete">
+	<img src="elements/logo.png" alt="fastliner" id="logo" />
+		<nav>
+			<ul>
+										<li class="lien_page active"><a href="routes">FRoutes</a></li>
+												<li class="lien_page "><a href="etats">Etats</a></li>
+												<li class="lien_page "><a href="projets">Projets</a></li>
+												<li class="lien_page "><a href="vehicules">Vehicules</a></li>
+												<li class="lien_page "><a href="chauffeurs">Chauffeurs</a></li>
+												<li class="lien_page "><a href="prets">Prets</a></li>
+												<li class="lien_page "><a href="debits">Debits</a></li>
+												<li class="lien_page "><a href="rapport">Rapport</a></li>
+										<li style="width: auto;"><a href="parametres" ><img src="elements/index.png" alt="parametres" /></a></li>
+			</ul>
+		</nav>
+	</div>
+	<div id="moteur" class="etats">
+		<form method="post" onSubmit="return false" id="form_filtre">
+			<div class="bloc_fitres">
+				<div class="filtres">
+					<input type="text" placeholder="Filtre" name="filtre_1" id="filtre_1" class="filtre" autocomplete="off" />
+					<select name="selection1" id="selection_filtres" class="selections  A" autocomplete="off">
+												<option id="nfr" value="nfr" id="nfr">N&deg;fr</option>
+													<option id="date" value="date" id="date">Date</option>
+													<option id="nom" value="nom" id="nom">Nom chauffeur</option>
+													<option id="matricule" value="matricule" id="matricule">Matricule</option>
+													<option id="destination" value="destination" id="destination">Destination</option>
+													<option id="idavance" value="idavance" id="idavance">Avance</option>
+													<option id="projet" value="projet" id="projet">Projet</option>
+													<option id="observation" value="observation" id="observation">observation</option>
+													<option id="prix" value="prix" id="prix">Prix</option>
+													<option id="depart" value="depart" id="depart">Depart</option>
+													<option id="idproduit" value="idproduit" id="idproduit">Produit</option>
+													<option id="poids" value="poids" id="poids">Poids</option>
+													<option id="n_document" value="n_document" id="n_document">N&deg;doccument</option>
+											</select>
+				</div>
+				<div class="bloc_bouttons">
+					<input id="btnFiltrer" type="submit" value="Filtrer" class="important"/>
+				</div>
+				<div class="bloc_bouttons" style="margin-right: 30px;">
+					<input type="text" id="date_min" name="date_min" placeholder="Date min"  autocomplete="off" />
+					<input type="text" id="date_max" name="date_max" placeholder="Date max"  autocomplete="off" />
+				</div>
+			</div>
+		</form>
+	</div>		<div id="formulaire_ajout" >
+			
+		<script type="text/javascript" src="js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="js/messages_fr.js"></script>
+	
+	
+<script>    
+
+
+  $(document).ready(function(){
+
+	$("#ouvrir_formulaire").click(function(){$("#formulaire").slideToggle(500)});
+	charger_projets();	
+	$("#idprojets").change(function(){
+		val=$("#idprojets").val()
+		charger_nfr(val);
+		charger_prix(val);
+		});
+    $("#form").validate({
+    	 rules: {
+         "nom":{
+            "required": true,
+            "minlength": 5,
+         },
+         "idprojet":{
+            "required": true,
+         },
+         "matricule": {
+            "required": true,
+            "maxlength": 255
+         },
+         "destination": {
+            "required": true
+         },         
+		  "poids": {
+            "required": true
+         },
+		  "ndocument": {
+            "required": true
+         },
+		  "idavance": {
+            "required": true
+         },
+		 	},
+		 })
+	$("#formulaire form").ajaxForm({
+	    beforeSubmit: function () {
+	    return $("#formulaire #form").valid();
+	},
+    success: function (returnData) {
+            $( ".reussi" ).show().html("chargement réussi").fadeOut(2000); 
+			Sort="id";Ordre="DESC";Filtre=[];Interval_date={min:"0",max:"0"};Page=1;
+			filtrer(function(){
+				$("#tableau_elements tr:eq(1)").hide().toggle(500).toggleClass("dernier_ajoute");
+				setTimeout(function(){
+					$("#tableau_elements tr:eq(1)").toggleClass("dernier_ajoute");		
+				},2000)
+        	})
+        }
+    })
+})
+
+</script>
+
+
+		<div id="formulaire" >
+			<form id="form" class="cmxform" method="post" enctype="multipart/form-data" action='ajax/enregistrement/ajaxpdf.php' >
+		<table id="ajout_projets">
+				
+				<tr>
+				<td>
+				<label for="pdf">le PDF</label>
+				</td>
+				<td>
+				<input autocomplete="off" name="pdf" id="pdf" type="file" autocomplete="off" style="border:none;width:125px" />
+				</td>
+				</tr>
+
+				<tr>
+				<td><label for="idprojet">Nom du projet</label></td>
+				<td id ="idprojet"><select name="idprojet" id="idprojets"><option value=""></option> </select></td>
+				</tr>	
+
+				<tr>
+				<td>
+				<label for="date">Date</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="date" name="date" id="date" class="date" value="05/06/2014"/>
+				</td>
+				</tr>
+					
+				<tr>
+				<td>
+				<label for="nom">Nom chauffeur</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="nom" id="nom" placeholder=" EX :gharbi ali" />
+				</td>
+				</tr>
+					
+				<tr>
+				<td>
+				<label for="matricule">Matricule</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="matricule" id="matricule" placeholder=" EX :55201-512-36" />
+				</td>
+				</tr>	
+					
+				<tr>
+				<td>
+				<label for="destination"> ligne de départ</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="depart" id="depart" placeholder=" EX :Oran" />
+				</td>
+				</tr>
+				
+				<tr>
+				<td>
+				<label for="destination"> Destination</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="destination" id="destination" placeholder=" EX :Tunis" />
+				</td>
+				</tr>
+					
+				<tr>
+				<td>
+				<label for="nfr">N°FR</label>
+				</td>
+				<td id="nfrs">
+				<input autocomplete="off" type="text" name="nfr" id="nfr" placeholder=" EX :367" />
+				</td>
+				</tr>
+
+				<tr>
+				<td>
+				<label for="prix">Prix</label>
+				</td>
+				<td id="prix">
+				<input autocomplete="off" type="text" name="prix" id="prix" placeholder= />
+				</td>
+				</tr>	
+					
+				<tr>
+				<td>
+				<label for="id_produit">N°Produit</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="idproduit" id="idproduit" placeholder=" EX :32" />
+				</td>
+				</tr>		
+				<tr>
+				<td>
+				<label for="poids">Poids</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="poids" id="poids" placeholder=" EX :40T"/>
+				</td>
+				</tr>	
+					
+				<tr>
+				<td>
+				<label for="n_document">N°document</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="n_document" id="n_document" placeholder=" EX :89379838" />
+				</td>
+				</tr>	
+					
+				<tr>
+				<td>
+				<label for="avance">Avance</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="avance" id="avance" placeholder=" EX :12.000.00" />
+				</td>
+				</tr>
+
+				<tr>
+				<td>
+				<label for="observation">observation</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="observation" id="observation" placeholder=" EX : observation" />
+				</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input class= "conex" style="vertical-align:top;" type="submit" value="enregistrer"/></td>
+				</tr>	
+				<tr>
+					<td></td>
+					<td><div class="reussi"></div></td>
+				</tr>	
+				</table>
+			</form>
+			</div>
+
+		</div>
+			<div id="space">
+		</div>
+		<div id="ouvrir_formulaire" >
+						Ajouter
+		</div>
+	<div id="entete_recherche"></div>
+		<div class="conteneur elements">			
+							<form>
+					<center>
+						<table id="tableau_elements">
+						</table>
+						<div id="cadre_pagination">
+	<table id="pagination_page">
+			<thead>
+			</thead>
+	</table>
+</div>							</center>
+				</form>
+						<div id="cadre_avances" class="fond_noir" style="">
+	<div id="conteneur_avances" class="conteneur_lightbox">
+		<form action="" method="post">
+			<input type="hidden" name="id">
+			<a href="javascript:" class="bouton_fermer"></a>
+			<h3 style="text-align: center;">Avances pour &nbsp Nfr°<span class="valeur_nfr"></span></h3>
+			<table id="avances_precedentes"></table>
+			<br>
+			<h3 style="text-align: center;">Nouvelle avance:</h3>
+			<table>
+				<tr>
+					<td><input type="text" placeholder="valeur" name="valeur" class="input" autocomplete="off"></td>
+					<td><input type="text" placeholder="date" name="date" class="input" autocomplete="off" value="05/06/2014"></td>
+				</tr>
+			</table>
+			<br>
+			<center><input style="vertical-align:top;" type="submit" value="ajouter" class="bouton_orange" /></center>
+		</form>
+	</div>
+</div>		
+<script type="text/javascript">
+	function recharger_avances(id_element){
+		var param={id:id_element};
+		$.post("ajax/chargement/recharger_avances.php",param,function(resultat){
+			var resultat = jQuery.parseJSON(resultat);
+			avances="<center>aucune avance.</center>";
+			if((resultat!=0)&&(resultat.length>0)){
+				avances="<thead><th>avance</th><th>date</th></thead><tbody>";
+				for(i=0;i<resultat.length;i++){
+					avances+="<tr><td>"+resultat[i].valeur+"</td><td>"+resultat[i].date+"</td></tr>";
+				}
+				avances+="</tbody>";
+			}
+			$("#cadre_avances #avances_precedentes").html(avances)
+		})
+	}
+	$(document).ready(function(){
+		$("#cadre_avances").hide().css("visibility","visible");
+		$("#cadre_avances input[name='date']").datepicker();
+		$("#cadre_avances .bouton_fermer").click(function(){
+			$("#cadre_avances").fadeOut(200)
+		});
+		$("#cadre_avances form").submit(function(){
+		console.log("k")
+			var param=$(this).serialize();
+			$.post("ajax/enregistrement/ajouter_avance.php",param,function(resultat){
+				var resultat = jQuery.parseJSON(resultat);
+				switch(resultat){
+					case(0):
+						$("#cadre_avances").fadeOut(200);
+						break;
+					case(-1):
+						alert("veuillez entrer une valeur");
+						break;
+					case(-2):
+						alert("veuillez entrer une date");
+						break;
+					case(-3):
+						alert("erreur connexion");
+						break;
+
+				}
+			})
+			return false;
+		})
+	})
+</script>						
+
+<div id="cadre_modification" class="fond_noir" style="">
+	<div id="conteneur_modification" class="conteneur_lightbox">
+		<form action="" method="post">
+			<input type="hidden" name="id">
+			<a href="javascript:" class="bouton_fermer"></a>
+			<h3 style="text-align: center;">Modification pour &nbsp Nfr°<span class="valeur_nfr"></span></h3>
+			<br>
+			<h3 style="text-align: center;">Modifier:</h3>
+			<form id="form_modif" method="post" action='' >
+		<table>
+				
+
+				<tr>
+				<td><label for="idprojet">Nom du projet</label></td>
+				<td id ="idprojet"><select name="idprojet" id="idprojets" class="input idprojets"><option value=""></option> </select></td>
+				</tr>	
+
+				<tr>
+				<td>
+			  	<label for="date">Date</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="date" name="date" id="date" class="date input" value="05/06/2014"/>
+				</td>
+				</tr>
+					
+				<tr>
+				<td>
+				<label for="nom">Nom chauffeur</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="nom" id="nom" class="input" placeholder=" EX :gharbi ali" />
+				</td>
+				</tr>
+					
+				<tr>
+				<td>
+				<label for="matricule">Matricule</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="matricule" id="matricule" class="input" placeholder=" EX :55201-512-36" />
+				</td>
+				</tr>	
+					
+				<tr>
+				<td>
+				<label for="destination"> ligne de départ</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="depart" id="depart" class="input" placeholder=" EX :Oran" />
+				</td>
+				</tr>
+				
+				<tr>
+				<td>
+				<label for="destination"> Destination</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="destination" id="destination" class="input" placeholder=" EX :Tunis" />
+				</td>
+				</tr>
+					
+				<tr>
+				<td>
+				<label for="nfr">N°FR</label>
+				</td>
+				<td id="nfrs">
+				<input autocomplete="off" type="text" name="nfr" id="nfr" class="input" placeholder=" EX :367" />
+				</td>
+				</tr>
+
+				<tr>
+				<td>
+				<label for="prix">Prix</label>
+				</td>
+				<td id="prix">
+				<input autocomplete="off" type="text" name="prix" id="prix" class="input" placeholder= />
+				</td>
+				</tr>	
+					
+				<tr>
+				<td>
+				<label for="id_produit">N°Produit</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="idproduit" id="idproduit" class="input" placeholder=" EX :32" />
+				</td>
+				</tr>	
+
+				<tr>
+				<td>
+				<label for="poids">Poids</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="poids" id="poids" class="input" placeholder=" EX :40T"/>
+				</td>
+				</tr>	
+					
+				<tr>
+				<td>
+				<label for="n_document">N°document</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="n_document" id="n_document" class="input" placeholder=" EX :89379838" />
+				</td>
+				</tr>	
+					
+				<tr>
+				<td>
+				<label for="avance">Avance</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="avance" id="avance" class="input" placeholder=" EX :12.000.00" />
+				</td>
+				</tr>
+
+				<tr>
+				<td>
+				<label for="observation">observation</label>
+				</td>
+				<td>
+				<input autocomplete="off" type="text" name="observation" id="observation" class="input" placeholder=" EX : observation" />
+				</td>
+				</tr>	
+				</table>
+				<center><input style="vertical-align:top;" type="submit" value="modifier" class="bouton_orange" /></center>
+		</form>
+	</div>
+</div>		
+<script type="text/javascript">
+	function charger_ancienne_route(id_element){
+		var param={id:id_element};
+		$.post("ajax/chargement/charger_ancienne_route.php",param,function(resultat){
+			var resultat = jQuery.parseJSON(resultat);
+			for(j=0;j<Champs_complets.length;j++){
+						 $("#cadre_modification input[name='"+Champs_complets[j]+"']").val(resultat[Champs_complets[j]])
+												}
+		})
+	}
+	$(document).ready(function(){
+			$("#conteneur_modification #idprojets").change(function(){
+				val=$("#conteneur_modification .idprojets").val()
+		charger_nfr(val);
+		charger_prix(val);
+		});
+		$("#cadre_modification").hide().css("visibility","visible");
+		$("#cadre_modification input[name='date']").datepicker();
+		$("#cadre_modification .bouton_fermer").click(function(){
+			$("#cadre_modification").fadeOut(200)
+		});
+		$("#cadre_modification form").submit(function(){
+			var param=$(this).serialize();
+			$.post("ajax/enregistrement/modifier_route.php",param,function(resultat){
+				var resultat = jQuery.parseJSON(resultat);
+				switch(resultat){
+					case(0):
+						$("#cadre_modification").fadeOut(200);
+						break;
+					case(-1):
+						alert("veuillez entrer une valeur");
+						break;
+					case(-2):
+						alert("veuillez entrer une date");
+						break;
+					case(-3):
+						alert("erreur connexion");
+						break;
+				}
+			})
+			return false;
+		})
+	})
+</script>		</div>
+		
+	</div>
+	    <script src="js/ui/jquery.ui.effect.js"></script>
+	<script src="js/ui/jquery.ui.effect-blind.js"></script>
+	<script src="js/ui/jquery.ui.effect-bounce.js"></script>
+	<script src="js/ui/jquery.ui.effect-clip.js"></script>
+	<script src="js/ui/jquery.ui.effect-drop.js"></script>
+	<script src="js/ui/jquery.ui.effect-explode.js"></script>
+	<script src="js/ui/jquery.ui.effect-fold.js"></script>
+	<script src="js/ui/jquery.ui.effect-highlight.js"></script>
+	<script src="js/ui/jquery.ui.effect-pulsate.js"></script>
+	<script src="js/ui/jquery.ui.effect-scale.js"></script>
+	<script src="js/ui/jquery.ui.effect-shake.js"></script>
+	<script src="js/ui/jquery.ui.effect-slide.js"></script>
+	<script src="js/ui/jquery.ui.core.js"></script>
+	<script src="js/ui/jquery.ui.widget.js"></script>
+	<script src="js/ui/jquery.ui.tabs.js"></script>
+	 <script src="js/notification_menu/js/jquery-ui-1.8.14.custom.min.js" type="text/javascript"></script>
+    <script src="js/notification_menu/js/ttw-notification-menu.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/jquery-form.js"></script>
+ 	<style type="text/css">
+ 		 #tabs.ui-widget-content {
+ 			background:none repeat scroll 0 0 #333333 !important;
+ 			border-width: 0px !important;
+
+ 		}
+
+		.ui-corner-top{
+			border-top-right-radius: 6px;
+			border-top-left-radius: 6px;
+		}
+		.ui-state-hover a div{
+			color: #ffffff !important;
+		}
+		.fond div div ul .ui-state-hover{
+			background: #e2e2e2 !important; /* Old browsers */
+			background: -webkit-gradient(linear, 0 0, 0 100%, from(#e2e2e2), color-stop(0.15, #d1d1d1), color-stop(0.16, #dbdbdb), to(#fefefe)) !important;
+			background: -webkit-linear-gradient(#e2e2e2 0%, #d1d1d1 15%, #dbdbdb 16%, #fefefe 100%) !important;			
+			background: -moz-linear-gradient(#e2e2e2 0%, #d1d1d1 15%, #dbdbdb 16%, #fefefe 100%) !important;
+			background: -o-linear-gradient(#e2e2e2 0%, #d1d1d1 15%, #dbdbdb 16%, #fefefe 100%) !important;
+			background: linear-gradient(#e2e2e2 0%, #d1d1d1 15%, #dbdbdb 16%, #fefefe 100%) !important; /* FF3.6+ */ /* Chrome,Safari4+ */ /* Chrome10+,Safari5.1+ */ /* Opera 11.10+ */ /* IE10+ */ /* W3C */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe',GradientType=0 ) !important; /* IE6-9 */
+		}
+		.ui-tabs-active{
+		background: none repeat scroll 0 0 #ED5B05 !important;}
+		.ui-state-default a div {
+			text-align: center;
+			color: black !important;
+		}
+		#tabs div.ui-tabs-panel table{
+			box-shadow: none !important;
+		}
+		#tabs div.ui-tabs-panel{
+			border-top: 4px solid #FFFFFF;
+			padding-top: 15px;
+			background:none repeat scroll 0 0 #333333 !important;
+		}
+		#tabs ul li{
+			background: #e2e2e2; /* Old browsers */
+			background: -webkit-gradient(linear, 0 0, 0 100%, from(#e2e2e2), color-stop(0.15, #d1d1d1), color-stop(0.16, #dbdbdb), to(#fefefe));
+			background: -webkit-linear-gradient(#e2e2e2 0%, #d1d1d1 15%, #dbdbdb 16%, #fefefe 100%);
+			background: -moz-linear-gradient(#e2e2e2 0%, #d1d1d1 15%, #dbdbdb 16%, #fefefe 100%);
+			background: -o-linear-gradient(#e2e2e2 0%, #d1d1d1 15%, #dbdbdb 16%, #fefefe 100%);
+			background: linear-gradient(#e2e2e2 0%, #d1d1d1 15%, #dbdbdb 16%, #fefefe 100%); /* FF3.6+ */ /* Chrome,Safari4+ */ /* Chrome10+,Safari5.1+ */ /* Opera 11.10+ */ /* IE10+ */ /* W3C */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe',GradientType=0 ); /* IE6-9 */
+			
+			}
+		.fond div div button{
+			margin-left: 43%;
+			margin-top: 40px;
+			margin-bottom: 10px;
+			background: -moz-linear-gradient(center top , #FF6F23, #ED5B05) repeat scroll 0 0 rgba(0, 0, 0, 0);
+   			border: 1px solid #D74705;
+    		border-radius: 2px;
+    		box-shadow: 1px 1px 0 #FF842D inset;
+    		color: #FFFFFF;
+   			padding: 5px 40px;
+   			cursor: pointer;
+		}
+		.button{
+			background-color: #424242;
+    		border: 1px solid #000000 !important;
+    		box-shadow: 1px 1px 0 #6E6E6E inset;
+    		border-radius: 2px;
+    		color: #FFFFFF;
+    		display: inline-flex;
+    		padding-left: 20px;
+    		padding-right: 20px;
+    		cursor: pointer;
+		}
+		tr:hover td .button{
+			background: none repeat scroll 0 0 graytext;
+    		color: #F5F5F5;
+		}
+		.bouton_fermer1{
+			background: url("elements/bouton_fermer.png") repeat scroll 0 0 rgba(0, 0, 0, 0);
+    		height: 33px;
+    		position: absolute;
+   			right: -12px;
+    		top: -12px;
+    		width: 33px;		
+		}
+		#incliquable{
+			pointer-events: none;
+			opacity: 0.6;
+		}
+ 	</style>
+	<link rel="stylesheet" href="js/ui/demos.css">
+	<link rel="stylesheet" href="jquery.ui.all.css"> 
+	<script>
+	$(function() {
+	   var notifications = new $.ttwNotificationMenu({
+        notificationList:{
+            anchor:'item',
+            offset:'0 15'
+        }
+    });
+$("#notif").one("hover",function(){
+	$("#tabs ul li.non").each(function(){
+	
+	$(this).removeClass("non");
+
+ var param={};
+ var page=$(this).find("a").attr("href");
+ var objet="#"+$(this).attr("id");
+ $.post(page,param,function(result){
+ 	var result = jQuery.parseJSON(result);
+ 	if(result==0){
+ 		$("#tabs ul li"+objet).attr("id","incliquable");
+ 	}
+ })
+})
+	})
+
+
+		$( "#tabs" ).tabs({
+			beforeLoad: function( event, ui ) {
+				ui.jqXHR.error(function() {
+					ui.panel.html(
+						"<p style='color:red'>erreur connexion <p> "  );
+				});
+			}
+		});
+	$("#close ,.bouton_fermer1").click(function(){
+	$( "#fond" ).toggle( "slide",100 );
+	 $(".non_vide").toggleClass("non_vide_click");
+				   
+	
+	});
+
+	});
+		   
+	</script>
+<div  class="fond" id="fond" style="top : 0px">
+
+
+
+<div style="min-height:500px;min-width:920px;border: 4px solid #FFFFFF;border-radius: 8px;margin: 50px 0 ;background:none repeat scroll 0 0 #333333;width:73%;height:60%;z-index:10;position:relative;float:left;margin-left: 13.5%; ">
+<a class="bouton_fermer1" href="javascript:"></a>
+<div id="tabs"  style="min-height:400px;">
+	<ul style="color:black !imporatant;">
+		<li id="assurance" class="non"><a href="notification/ajax/chargement/assurance.php"><div style="height: 25px;">Assurance</div></a></li>
+		<li id="vignette" class="non"><a href="notification/ajax/chargement/vignette.php"><div style="height: 25px;">Vignette</div></a></li>
+		<li id="scanner" class="non"><a href="notification/ajax/chargement/scanner.php"><div style="height: 25px;">Scanner</div></a></li>
+		<li id="controle_tecnique" class="non"><a href="notification/ajax/chargement/controle_tecnique.php"><div style="height: 25px;">Controle tecnique</div></a></li>
+		<li id="paye" class="non"><a href="notification/ajax/chargement/paye.php"><div style="height: 25px;">Paye chauffeur</div></a></li>
+		<li id="assurance_chauffeur" class="non"><a href="notification/ajax/chargement/assurance_chauffeur.php"><div style="height: 25px;">Assurance chauffeur</div></a></li>
+	</ul>
+	
+</div>
+
+</div>
+<div id="close"  style=" min-height: 300px;background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);height: 100%;position: absolute;width: 100%;z-index: 9;">   </div>
+</div>	</body>
+<script>
+</script>
+</html>

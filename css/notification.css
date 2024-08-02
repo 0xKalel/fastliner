@@ -1,0 +1,149 @@
+ #tabs.ui-widget-content {
+     border-width: 0px !important;
+     background:none ! important;
+ }
+ .ui-corner-top {
+     border-top-right-radius: 6px;
+     border-top-left-radius: 6px;
+ }
+ .scroll .mCSB_container {
+     margin-right: 0px !important;
+ }
+ .scroll div .mCSB_scrollTools {
+     display: block;
+     width: 8px !important;
+ }
+ .fond div div ul .nonactive {
+     background: #e2e2e2 !important;
+     /* Old browsers */
+     background: -webkit-gradient(linear, 0 0, 0 100%, from(#e2e2e2), color-stop(0.15, #d1d1d1), color-stop(0.16, #dbdbdb), to(#fefefe)) !important;
+     background: -webkit-linear-gradient(#e2e2e2 0%, #d1d1d1 15%, #dbdbdb 16%, #fefefe 100%) !important;
+     background: -moz-linear-gradient(#e2e2e2 0%, #d1d1d1 15%, #dbdbdb 16%, #fefefe 100%) !important;
+     background: -o-linear-gradient(#e2e2e2 0%, #d1d1d1 15%, #dbdbdb 16%, #fefefe 100%) !important;
+     background: linear-gradient(#e2e2e2 0%, #d1d1d1 15%, #dbdbdb 16%, #fefefe 100%) !important;
+     /* FF3.6+ */
+     /* Chrome,Safari4+ */
+     /* Chrome10+,Safari5.1+ */
+     /* Opera 11.10+ */
+     /* IE10+ */
+     /* W3C */
+     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e2e2e2', endColorstr='#fefefe', GradientType=0) !important;
+     /* IE6-9 */
+     border: 1px solid #666666 !important;
+ }
+ .ui-tabs-active {
+     background: none repeat scroll 0 0 #ED5B05 !important;
+ }
+ .ui-tabs-active:hover {
+     background: none repeat scroll 0 0 #ED5B05 !important;
+ }
+ .ui-state-default a div {
+     text-align: center;
+     color: black !important;
+ }
+ #tabs div.ui-tabs-panel table {
+     box-shadow: none !important;
+ }
+ #tabs div.ui-tabs-panel {
+     border: 4px solid #FFFFFF;
+     background:none repeat scroll 0 0 #333333 !important;
+ }
+ #fond .ui-state-default{
+     background: transparent !important;
+     border: none !important;
+ }
+ #fond .ui-state-default a div{
+     color:white !important;
+ }
+ #fond .ui-tabs-active{
+     background:white !important;
+     border:1px solid white;
+ }
+ #fond .ui-tabs-active a div{
+     color:black !important;
+ }
+ #tabs ul li {
+     background: #e2e2e2;
+     /* Old browsers */
+     /* FF3.6+ */
+     /* Chrome,Safari4+ */
+     /* Chrome10+,Safari5.1+ */
+     /* Opera 11.10+ */
+     /* IE10+ */
+     /* W3C */
+     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e2e2e2', endColorstr='#fefefe', GradientType=0);
+     /* IE6-9 */
+ }
+ .fond div div button {
+     margin-left: 43%;
+     margin-top: 40px;
+     margin-bottom: 10px;
+     background: -moz-linear-gradient(center top, #FF6F23, #ED5B05) repeat scroll 0 0 rgba(0, 0, 0, 0);
+     border: 1px solid #D74705;
+     border-radius: 2px;
+     box-shadow: 1px 1px 0 #FF842D inset;
+     color: #FFFFFF;
+     padding: 5px 40px;
+     cursor: pointer;
+ }
+ .button {
+     background-color: #424242;
+     border: 1px solid #000000 !important;
+     box-shadow: 1px 1px 0 #6E6E6E inset;
+     border-radius: 2px;
+     color: #FFFFFF;
+     display: inline-flex;
+     padding-left: 20px;
+     padding-right: 20px;
+     cursor: pointer;
+ }
+ tr:hover td .button {
+     background: none repeat scroll 0 0 graytext;
+     color: #F5F5F5;
+ }
+ .bouton_fermer1 {
+     background: url("../elements/bouton_fermer.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+     height: 33px;
+     position: absolute;
+     right: -12px;
+     top: 12px;
+     width: 33px;
+     z-index: 10;
+ }
+ .incliquable {
+     pointer-events: none;
+     opacity: 0.6;
+ }
+ .notif_0 {
+     pointer-events:none;
+ }
+ .fond div div #tableau_notifications tr:nth-child(2n) {
+     background:white;
+ }
+ #tableau_notifications{
+     background:white;
+     margin-top: 0 !important;
+ }
+ .scroll{
+     padding: 30px 10px;
+ }
+ .d {
+     background-color: #ED5B05;
+     color: #FFFFFF;
+ }
+#fond .ui-widget-header{
+     background:none !important;
+     border:none !important;
+}
+.prochain_reglement.bon{
+     color:rgb(0, 118, 0) !important;
+}
+.prochain_reglement.insuffisant{
+     color:rgb(185, 0, 0) !important;
+}
+#tableau_notifications tr:hover .prochain_reglement.insuffisant{
+     color:rgb( 256,0, 0) !important;
+}
+#tableau_notifications tr:hover .prochain_reglement.bon{
+     color:rgb(0, 228, 0) !important;
+}

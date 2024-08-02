@@ -1,0 +1,210 @@
+html, body {
+    height:100%;
+    margin:0px;
+    padding:0px;
+}
+h1, h2, h3, h4, h5 {
+    display:inline-block;
+}
+#affichage1 {
+    line-height: 1.5;
+}
+#entet, .entet {
+    display:none !important;
+}
+a, a img, a:hover, a img:hover, a:active, a img:active, a:link, a img:link {
+    text-decoration:none;
+    outline:0;
+}
+#bas, #feuille {
+    width: 600px;
+}
+#bas td {
+    border-top:none !important;
+    padding-bottom:100px;
+}
+table H4#cadre {
+    margin: 0px;
+}
+table {
+    border-spacing:0;
+}
+th, td {
+    width: 200px;
+    padding-left:10px;
+}
+th {
+    cursor:pointer;
+}
+.Routes th {
+    padding-right:25px;
+}
+#moteur {
+    min-height:5px;
+    background:#88ACC4;
+    width:100%;
+    padding:5px;
+    text-align:center;
+}
+#fast {
+    margin-left: 50px;
+}
+#fast h1 {
+    position: absolute !important;
+}
+#fast h5 {
+    margin-top: 40px !important;
+    display: -moz-box;
+    margin-left: 15px;
+}
+#titre {
+   
+    color:white;
+    /*display:-webkit-box !important;*/
+}
+.conteneur {
+    width:1000px;
+    margin:0px auto;
+}
+.Routes.conteneur {
+    margin:20px auto !important;
+}
+.ib {
+    display:inline-block;
+}
+.decroissant {
+    padding-right:25px;
+    background:url("../elements/decroissant.png") right 18px no-repeat;
+}
+.croissant {
+    padding-right:25px;
+    background:url("../elements/croissant.png") right 18px no-repeat;
+}
+.b {
+    padding-right:25px;
+}
+.filtres {
+    float :left;
+    margin-left:50px;
+}
+.a {
+    width : 20px;
+    background : black;
+}
+#form_filtre {
+    display:inline-block;
+}
+/**********************************
+
+Name: cmxform Styles
+
+***********************************/
+ form.cmxform {
+    width: 370px;
+    font-size: 1.0em;
+    color: #333;
+}
+form.cmxform legend {
+    padding-left: 0;
+}
+form.cmxform legend, form.cmxform label {
+    color: #333;
+}
+form.cmxform fieldset {
+    border: none;
+    border-top: 1px solid #C9DCA6;
+    background: url("../elements/cmxform-fieldset.gif") left bottom repeat-x;
+    background-color: #F8FDEF;
+}
+form.cmxform fieldset fieldset {
+    background: none;
+}
+select {
+    width: 150px;
+}
+form.cmxform fieldset p, form.cmxform fieldset fieldset {
+    padding: 5px 10px 7px;
+    background: url("../elements/cmxform-divider.gif") left bottom repeat-x;
+}
+form.cmxform label.error, label.error {
+    /* remove the next line when you have trouble in IE6 with labels in list */
+    color: red;
+    font-style: italic;
+    font-size: 16px;
+}
+div.error {
+    display: none;
+}
+input {
+    border: 1px solid black;
+}
+input.checkbox {
+    border: none
+}
+input:focus {
+    border: 1px dotted black;
+}
+input.error {
+    border: 1px dotted red;
+}
+form.cmxform .gray * {
+    color: gray;
+}
+form.cmxform fieldset {
+    margin-bottom: 10px;
+}
+body, div {
+    font-family:'lucida grande', helvetica, verdana, arial, sans-serif
+}
+#form {
+    width: 500px;
+}
+#form label {
+    width: 250px;
+}
+#form label.error, #form input.submit {
+    margin-left: 253px;
+}
+#contineur_page {
+    margin: auto;
+    width: 1000px;
+}
+.conteneur {
+    box-shadow: 0 0 15px 1px #bbbbbb;
+    background: rgb(51, 51, 51);
+    min-height:300px;
+    padding-bottom: 10px;
+}
+table {
+    background:rgb(51, 51, 51) !important;
+    color:white;
+}
+#orange {
+    background: linear-gradient(to bottom, rgb(245, 101, 25) 63%, rgb(237, 91, 5) 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: 1px solid rgb(215, 71, 5);
+    border-radius: 2px;
+    box-shadow: 1px 1px 0 rgb(255, 132, 45) inset;
+    box-sizing: border-box;
+    display: block;
+    min-height: 5px;
+    position: relative;
+    width: 1000px;
+    margin: 50px auto 0 auto;
+}
+.button_orange {
+    background: linear-gradient(to bottom, rgb(255, 111, 35) 63%, rgb(237, 91, 5) 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: 1px solid rgb(215, 71, 5);
+    border-radius: 2px;
+    box-shadow: 1px 1px 0 rgb(255, 132, 45) inset;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 5px 40px;
+    margin-top: 50px;
+}
+.labeltd{
+	text-align: right;
+    color:rgb(200, 200, 200) !important;
+}
+#bas{
+	box-shadow:0 0 15px 1px #bbbbbb;
+}
