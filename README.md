@@ -22,11 +22,11 @@ This is a comprehensive management system built in 2014 for a logistics and pipe
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
+   git clone https://github.com/0xKalel/fastliner.git
 
 2. Navigate to the project directory:
    ```bash
-   cd your-repo-name
+   cd fastliner
 
 3. Navigate to the project directory:
    ```bash
